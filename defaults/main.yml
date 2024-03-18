@@ -1,6 +1,6 @@
 ---
 # defaults file for sonarqube
-sonar_version: 10.3.0.82913
+sonar_version: 10.4.1.88267
 
 sonar_path: /opt/sonarqube
 sonar_user: sonar
@@ -78,7 +78,7 @@ pmd_pversion: "{% if sonar_version is version(\"7.0\", \">=\") %}3.4.0\
                {% else %}2.6\
                {% endif %}"
 
-findbugs_pversion: "{% if sonar_version is version(\"7.6\", \">=\") %}4.2.6\
+findbugs_pversion: "{% if sonar_version is version(\"7.6\", \">=\") %}4.2.7\
                     {% else %}0.0.0\
                     {% endif %}"
 
@@ -94,7 +94,8 @@ groovy_pversion: "{% if sonar_version is version(\"8.0\", \">=\") %}1.8\
                   {% else %}1.7\
                   {% endif %}"
 
-dependency_check_pversion: "{% if sonar_version is version(\"9.9\", \">=\") %}4.0.1\
+dependency_check_pversion: "{% if sonar_version is version(\"10.2\", \">=\") %}5.0.0\
+                            {% elif sonar_version is version(\"9.9\", \">=\") %}4.0.1\
                             {% elif sonar_version is version(\"8.9\", \">=\") %}3.1.0\
                             {% elif sonar_version is version(\"7.6\", \">=\") %}2.0.8\
                             {% elif sonar_version is version(\"7.3\", \">=\") %}1.2.1\
@@ -115,14 +116,14 @@ shellcheck_pversion: "{% if sonar_version is version(\"7.4\", \">=\") %}2.5.0\
                       {% else %}2.2.1\
                       {% endif %}"
 
-java_pversion: "{% if sonar_version is version(\"9.6\", \">=\") %}7.30.1.34514\
+java_pversion: "{% if sonar_version is version(\"9.6\", \">=\") %}7.31.0.34839\
                 {% elif sonar_version is version(\"8.9\", \">=\") %}7.17.0.31219\
                 {% elif sonar_version is version(\"7.9\", \">=\") %}7.6.0.28201\
                 {% elif sonar_version is version(\"7.0\", \">=\") %}5.14.0.18788\
                 {% else %}0.0.0\
                 {% endif %}"
 
-javascript_pversion: "{% if sonar_version is version(\"10.0\", \">=\") %}10.11.1.25225\
+javascript_pversion: "{% if sonar_version is version(\"10.0\", \">=\") %}10.12.0.25537\
                       {% elif sonar_version is version(\"9.2\", \">=\") %}9.13.0.20537\
                       {% elif sonar_version is version(\"8.9\", \">=\") %}8.5.0.16762\
                       {% elif sonar_version is version(\"8.0\", \">=\") %}8.3.0.16208\
@@ -147,7 +148,7 @@ xml_pversion: "{% if sonar_version is version(\"9.9\", \">=\") %}2.10.0.4108\
                {% else %}0.0.0\
                {% endif %}"
 
-python_pversion: "{% if sonar_version is version(\"9.6\", \">=\") %}4.14.0.14263\
+python_pversion: "{% if sonar_version is version(\"9.6\", \">=\") %}4.15.0.14551\
                   {% elif sonar_version is version(\"7.9\", \">=\") %}4.1.0.11333\
                   {% elif sonar_version is version(\"7.0\", \">=\") %}1.14.1.3143\
                   {% else %}0.0.0\
@@ -163,7 +164,7 @@ css_pversion: "{% if sonar_version is version(\"9.2\", \">=\") %}0.0.0\
                {% else %}1.1.1.1010\
                {% endif %}"
 
-html_pversion: "{% if sonar_version is version(\"9.6\", \">=\") %}3.13.0.4821\
+html_pversion: "{% if sonar_version is version(\"9.6\", \">=\") %}3.14.0.5048\
                 {% elif sonar_version is version(\"7.9\", \">=\") %}3.7.1.3306\
                 {% else %}3.2.0.2082\
                 {% endif %}"
@@ -184,12 +185,16 @@ iac_pversion: "{% if sonar_version is version(\"9.6\", \">=\") %}1.26.0.8471\
 
 config_pversion: 0.0.0
 
+cayc_pversion: "{% if sonar_version is version(\"8.9\", \">=\") %}2.3.0.1782\
+                {% else %}0.0.0\
+                {% endif %}"
+
 text_pversion: "{% if sonar_version is version(\"9.8\", \">=\") %}2.5.0.2293\
                 {% elif sonar_version is version(\"8.9\", \">=\") %}1.2.0.510\
                 {% else %}0.0.0\
                 {% endif %}"
 
-dotnet_pversion: "{% if sonar_version is version(\"9.6\", \">=\") %}9.19.0.84025\
+dotnet_pversion: "{% if sonar_version is version(\"9.6\", \">=\") %}9.20.0.85982\
                   {% else %}9.0.0.68202\
                   {% endif %}"
 
@@ -306,6 +311,7 @@ sonar_default_plugins:
   - 'https://binaries.sonarsource.com/Distribution/sonar-text-plugin/sonar-text-plugin-{{ text_pversion }}.jar'
   - 'https://github.com/SonarSource/sonar-dotnet/releases/download/{{ dotnet_pversion }}/sonar-csharp-plugin-{{ dotnet_pversion }}.jar'
   - 'https://github.com/SonarSource/sonar-dotnet/releases/download/{{ dotnet_pversion }}/sonar-vbnet-plugin-{{ dotnet_pversion }}.jar'
+  - 'https://binaries.sonarsource.com/Distribution/sonar-cayc-plugin/sonar-cayc-plugin-{{ cayc_pversion }}.jar'
 
 sonar_install_optional_plugins: false
 
@@ -351,8 +357,8 @@ sonar_optional_plugins:
   - "https://github.com/wttech/AEM-Rules-for-SonarQube/releases/download/\
     v{{ aem_pversion }}/sonar-aemrules-plugin-{{ aem_pversion }}.jar"
 
-sonar_all_plugins: "{{ sonar_install_recommended_plugins | ternary(sonar_recommended_plugins, []) +\
-                       sonar_update_default_plugins | ternary(sonar_default_plugins, []) +\
+sonar_all_plugins: "{{ sonar_install_recommended_plugins | ternary(sonar_recommended_plugins, []) + \
+                       sonar_update_default_plugins | ternary(sonar_default_plugins, []) + \
                        sonar_install_optional_plugins | ternary(sonar_optional_plugins, []) }}"
 
 sonar_plugins_path: "{% if sonar_version is version(\"8.5.0.37579\", \">=\") %}sonarqube-{{ sonar_version }}/lib/extensions\
@@ -394,6 +400,7 @@ sonar_excluded_plugins:
   - '{{ sonar_plugins_path }}/sonar-java-plugin-7.20.0.31692.jar' # 10.1
   - '{{ sonar_plugins_path }}/sonar-java-plugin-7.24.0.32100.jar' # 10.2
   - '{{ sonar_plugins_path }}/sonar-java-plugin-7.27.1.33504.jar' # 10.3
+  - '{{ sonar_plugins_path }}/sonar-java-plugin-7.30.0.34429.jar' # 10.4
 
   - '{{ sonar_plugins_path }}/sonar-javascript-plugin-4.1.0.6085.jar'
   - '{{ sonar_plugins_path }}/sonar-javascript-plugin-4.2.0.6476.jar'
@@ -422,6 +429,7 @@ sonar_excluded_plugins:
   - '{{ sonar_plugins_path }}/sonar-javascript-plugin-10.3.1.21905.jar' # 10.1
   - '{{ sonar_plugins_path }}/sonar-javascript-plugin-10.5.1.22382.jar' # 10.2
   - '{{ sonar_plugins_path }}/sonar-javascript-plugin-10.9.0.24449.jar' # 10.3
+  - '{{ sonar_plugins_path }}/sonar-javascript-plugin-10.11.1.25225-multi.jar' # 10.4
 
   - '{{ sonar_plugins_path }}/sonar-typescript-plugin-1.7.0.2893.jar'
   - '{{ sonar_plugins_path }}/sonar-typescript-plugin-1.8.0.3332.jar'
@@ -476,6 +484,7 @@ sonar_excluded_plugins:
   - '{{ sonar_plugins_path }}/sonar-python-plugin-4.3.0.11660.jar' # 10.1
   - '{{ sonar_plugins_path }}/sonar-python-plugin-4.7.0.12181.jar' # 10.2
   - '{{ sonar_plugins_path }}/sonar-python-plugin-4.10.0.13725.jar' # 10.3
+  - '{{ sonar_plugins_path }}/sonar-python-plugin-4.14.0.14263.jar' # 10.4
 
   - '{{ sonar_plugins_path }}/sonar-kotlin-plugin-1.0.1.965.jar'
   - '{{ sonar_plugins_path }}/sonar-kotlin-plugin-1.2.1.2009.jar'
@@ -494,6 +503,7 @@ sonar_excluded_plugins:
   - '{{ sonar_plugins_path }}/sonar-kotlin-plugin-2.15.0.2579.jar' # 10.1
   - '{{ sonar_plugins_path }}/sonar-kotlin-plugin-2.17.0.2902.jar' # 10.2
   - '{{ sonar_plugins_path }}/sonar-kotlin-plugin-2.18.0.2938.jar' # 10.3
+  - '{{ sonar_plugins_path }}/sonar-kotlin-plugin-2.20.0.4382.jar' # 10.4
 
   - '{{ sonar_plugins_path }}/sonar-css-plugin-1.0.1.508.jar'
   - '{{ sonar_plugins_path }}/sonar-css-plugin-1.0.2.611.jar'
@@ -542,6 +552,7 @@ sonar_excluded_plugins:
   - '{{ sonar_plugins_path }}/sonar-html-plugin-3.8.0.3510.jar' # 10.1
   - '{{ sonar_plugins_path }}/sonar-html-plugin-3.9.0.3600.jar' # 10.2
   - '{{ sonar_plugins_path }}/sonar-html-plugin-3.11.0.4708.jar' # 10.3
+  - '{{ sonar_plugins_path }}/sonar-html-plugin-3.13.0.4821.jar' # 10.4
 
   - '{{ sonar_plugins_path }}/sonar-jacoco-plugin-1.0.1.143.jar'
   - '{{ sonar_plugins_path }}/sonar-jacoco-plugin-1.0.2.475.jar'
@@ -558,6 +569,7 @@ sonar_excluded_plugins:
   - '{{ sonar_plugins_path }}/sonar-iac-plugin-1.17.0.3976.jar' # 10.1
   - '{{ sonar_plugins_path }}/sonar-iac-plugin-1.20.0.5654.jar' # 10.2
   - '{{ sonar_plugins_path }}/sonar-iac-plugin-1.22.0.7057.jar' # 10.3
+  - '{{ sonar_plugins_path }}/sonar-iac-plugin-1.26.0.8471.jar' # 10.4
 
   - '{{ sonar_plugins_path }}/sonar-config-plugin-1.1.0.185.jar'
   - '{{ sonar_plugins_path }}/sonar-config-plugin-1.2.0.267.jar'
@@ -571,6 +583,7 @@ sonar_excluded_plugins:
   - '{{ sonar_plugins_path }}/sonar-text-plugin-2.1.0.1163.jar' # 10.1
   - '{{ sonar_plugins_path }}/sonar-text-plugin-2.3.0.1632.jar' # 10.2
   - '{{ sonar_plugins_path }}/sonar-text-plugin-2.7.1.1388.jar' # 10.3
+  - '{{ sonar_plugins_path }}/sonar-text-plugin-2.8.0.1635.jar' # 10.4
 
   - '{{ sonar_plugins_path }}/sonar-csharp-plugin-7.15.0.8572.jar'
   - '{{ sonar_plugins_path }}/sonar-csharp-plugin-8.22.0.31243.jar'
@@ -588,6 +601,7 @@ sonar_excluded_plugins:
   - '{{ sonar_plugins_path }}/sonar-csharp-plugin-9.3.0.71466.jar' # 10.1
   - '{{ sonar_plugins_path }}/sonar-csharp-plugin-9.8.0.76515.jar' # 10.2
   - '{{ sonar_plugins_path }}/sonar-csharp-plugin-9.13.0.79967.jar' # 10.3
+  - '{{ sonar_plugins_path }}/sonar-csharp-plugin-9.19.0.84025.jar' # 10.4
 
   - '{{ sonar_plugins_path }}/sonar-vbnet-plugin-7.15.0.8572.jar'
   - '{{ sonar_plugins_path }}/sonar-vbnet-plugin-8.22.0.31243.jar'
@@ -605,11 +619,17 @@ sonar_excluded_plugins:
   - '{{ sonar_plugins_path }}/sonar-vbnet-plugin-9.3.0.71466.jar' # 10.1
   - '{{ sonar_plugins_path }}/sonar-vbnet-plugin-9.8.0.76515.jar' # 10.2
   - '{{ sonar_plugins_path }}/sonar-vbnet-plugin-9.13.0.79967.jar' # 10.3
+  - '{{ sonar_plugins_path }}/sonar-vbnet-plugin-9.19.0.84025.jar' # 10.4
+
+  - '{{ sonar_plugins_path }}/sonar-cayc-plugin-2.0.0.334.jar' # 10.1
+  - '{{ sonar_plugins_path }}/sonar-cayc-plugin-2.1.0.500.jar' # 10.2
+  - '{{ sonar_plugins_path }}/sonar-cayc-plugin-2.2.2.656.jar' # 10.3
+  - '{{ sonar_plugins_path }}/sonar-cayc-plugin-2.3.0.1782.jar' # 10.4
 
 # Override this var to exclude default plugins you don't need
 sonar_default_excluded_plugins: []
 
-sonar_all_excluded_plugins: "{{ sonar_update_default_plugins | ternary(sonar_excluded_plugins, []) +\
+sonar_all_excluded_plugins: "{{ sonar_update_default_plugins | ternary(sonar_excluded_plugins, []) + \
                                 sonar_default_excluded_plugins }}"
 
 # SonarQube configuration
